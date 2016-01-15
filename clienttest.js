@@ -6,7 +6,7 @@ socket.on('connect', function () {
 
     console.log('Connected!\n\tSending query ...');
 
-    socket.emit('MinigameUpdate', '\tMG-CTF 1 state inprog', function (data) {
+    socket.emit('MinigameUpdate', 'MG-CTF 1 state inprog', function (data) {
       console.log(data); 
     });
 
