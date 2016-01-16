@@ -9,7 +9,7 @@ var clc = require('cli-color');
 
 var port = 6000;
 var versionFull = "2.0 Alpha"
-var versionNumber = 2.1;
+var versionNumber = 2.;
 
 var NodeRSA = require('node-rsa');
 console.log(logConsole('Loading RSA key...', 3));
@@ -140,11 +140,12 @@ io.sockets.on('connection', function(socket) {
 var server = net.createServer(function (c)
 { //'connection' listener
     console.log(logConsole('Client connection initilizaed.', 3));
-	
+	c.write('Connected to IdroServer System ' + versionFull + '.\r\n')
+	c.write('OK')
     c.on('data', function (rawData)
     {
         console.log(logConsole(rawData, 0));   
-		
+		c.write('DATA OK');
 		//Convert incoming data to string.
 		var data = rawData.toString('utf-8');
 		
@@ -158,6 +159,7 @@ var server = net.createServer(function (c)
 		
 		if(data == 'MG-CTF 1 state inprog'){
 			console.log(logConsole('CTF Minigame, Server 1, is now in progress!', 3));
+			c.write('STATE SET OK');
 		}
 		eventEmitter.emit('MinigameUpdate');
 
