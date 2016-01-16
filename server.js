@@ -8,7 +8,21 @@ var port = 6000;
 var versionFull = "2.0 Alpha"
 var versionNumber = 2.1;
 
-console.log('Starting IdroServer System ' + versionFull + '...');
+var NodeRSA = require('node-rsa');
+console.log(logConsole('Loading RSA key...', 3));
+//Change this key in production use!
+var key = new NodeRSA('-----BEGIN RSA PRIVATE KEY-----\n'+
+                      'MIIBOQIBAAJAVY6quuzCwyOWzymJ7C4zXjeV/232wt2ZgJZ1kHzjI73wnhQ3WQcL\n'+
+                      'DFCSoi2lPUW8/zspk0qWvPdtp6Jg5Lu7hwIDAQABAkBEws9mQahZ6r1mq2zEm3D/\n'+
+                      'VM9BpV//xtd6p/G+eRCYBT2qshGx42ucdgZCYJptFoW+HEx/jtzWe74yK6jGIkWJ\n'+
+                      'AiEAoNAMsPqwWwTyjDZCo9iKvfIQvd3MWnmtFmjiHoPtjx0CIQCIMypAEEkZuQUi\n'+
+                      'pMoreJrOlLJWdc0bfhzNAJjxsTv/8wIgQG0ZqI3GubBxu9rBOAM5EoA4VNjXVigJ\n'+
+                      'QEEk1jTkp8ECIQCHhsoq90mWM/p9L5cQzLDWkTYoPI49Ji+Iemi2T5MRqwIgQl07\n'+
+                      'Es+KCn25OKXR/FJ5fu6A6A+MptABL3r8SEjlpLc=\n'+
+                      '-----END RSA PRIVATE KEY-----');
+console.log(logConsole('Done loading RSA Key!', 3));
+
+console.log(logConsole('Starting IdroServer System ' + versionFull + '...', 3));
 
 //Get the current date+time
 function getDateTime() {
@@ -89,9 +103,17 @@ var server = net.createServer(function (c)
     c.on('data', function (rawData)
     {
         console.log(logConsole(rawData, 0));   
+		
+		//Convert incoming data to string.
 		var data = rawData.toString('utf-8');
 		
-		console.log(logConsole(data, 3)); 
+		//console.log(key); nope this doesnt work
+		var encrypted = key.encrypt(rawData, 'base64');
+		console.log('encrypted: ', encrypted);
+		var decrypted = key.decrypt(encrypted, 'utf8');
+		console.log('decrypted: ', decrypted);
+		
+		//console.log(logConsole(data, 3)); 
 		
 		if(data == 'MG-CTF 1 state inprog'){
 			console.log(logConsole('CTF Minigame, Server 1, is now in progress!', 3));
@@ -115,5 +137,5 @@ console.log(logConsole('This is a test message! woot!', 3));
 
 server.listen(port, function ()
 { 
-    console.log('IdroServer System ' + versionFull + ' is listening on port ' + port);
+    console.log(logConsole('IdroServer System ' + versionFull + ' is listening on port ' + port, 3));
 });
