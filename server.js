@@ -3,6 +3,9 @@
 var net = require('net');
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
+const chalk = require('chalk');
+var readline = require('readline');
+var clc = require('cli-color');
 
 var port = 6000;
 var versionFull = "2.0 Alpha"
@@ -21,6 +24,31 @@ var key = new NodeRSA('-----BEGIN RSA PRIVATE KEY-----\n'+
                       'Es+KCn25OKXR/FJ5fu6A6A+MptABL3r8SEjlpLc=\n'+
                       '-----END RSA PRIVATE KEY-----');
 console.log(logConsole('Done loading RSA Key!', 3));
+
+console.log(logConsole('Starting terminal check, you should see the text "test" in various colors and formats.', 3));
+console.log(chalk.bold('test'));
+console.log(chalk.dim('test'));
+console.log(chalk.italic('test'));
+console.log(chalk.underline('test'));
+console.log(chalk.inverse('test'));
+console.log(chalk.strikethrough('test'));
+console.log(chalk.red('test'));
+console.log(chalk.green('test'));
+console.log(chalk.blue('test'));
+console.log(chalk.magenta('test'));
+console.log(chalk.cyan('test'));
+console.log(chalk.white('test'));
+console.log(chalk.gray('test'));
+console.log(chalk.bgBlack('test'));
+console.log(chalk.bgRed('test'));
+console.log(chalk.bgGreen('test'));
+console.log(chalk.bgYellow('test'));
+console.log(chalk.bgBlue('test'));
+console.log(chalk.bgMagenta('test'));
+console.log(chalk.bgCyan('test'));
+console.log(chalk.bgWhite('test'));
+
+console.log(logConsole('Terminal check complete!', 3));
 
 console.log(logConsole('Starting IdroServer System ' + versionFull + '...', 3));
 
@@ -58,13 +86,20 @@ function logConsole(logtext, level) {
 	
 	switch(level) {
 		case 0:
-			loglevel = 'DEBUG';
+			loglevel = chalk.blue('DEBUG');
+			break;
 		case 1:
-			loglevel = 'ERROR';
+			loglevel = chalk.red('ERROR');
+			break;
 		case 2:
-			loglevel = 'WARNING';
+			loglevel = chalk.yellow('WARNING');
+			break;
 		case 3:
-			loglevel = 'INFO';
+			loglevel = chalk.green('INFO');
+			break;
+		default:
+			loglevel = chalk.magenta('UNKOWN');
+			break;
 	}
 	return '[' + getDateTime() + ']' + '[' + loglevel + ']' + ' ' + logtext;
 }
@@ -133,9 +168,43 @@ var minigameUpdate = function minigameUpdate(){
 }
 
 eventEmitter.on('MinigameUpdate', minigameUpdate);
-console.log(logConsole('This is a test message! woot!', 3));
+console.log(logConsole('This is a test message! woot!', 0));
 
 server.listen(port, function ()
 { 
-    console.log(logConsole('IdroServer System ' + versionFull + ' is listening on port ' + port, 3));
+    console.log(logConsole('IdroServer System ' + versionFull + ' is listening on port ' + chalk.magenta(port), 3));
+	process.stdout.write("> ");
+});
+
+var shutdown = function shutdown(code){
+	console.log(logConsole('IdroServer is shutting down!', 2));
+	process.exit(code)
+}
+
+
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false
+});
+
+rl.on('line', function (cmd) {
+	process.stdout.write(clc.move.up(1));
+	process.stdout.write(clc.erase.line);
+	switch(cmd) {
+		case 'help':
+			console.log(logConsole('Help is a WIP.', 3));
+			break;
+		case 'stop':
+			shutdown(0)
+		case 'version':
+			console.log(logConsole('This is IdroServer System ' +  versionFull + ' running on port ' + port, 2));
+			break;
+		default:
+			console.log(logConsole('Unknown command: ' + cmd, 2));
+			break;
+			
+	}
+	process.stdout.write("> ");
+	//case
 });
