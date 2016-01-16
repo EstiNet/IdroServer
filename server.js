@@ -25,6 +25,7 @@ var key = new NodeRSA('-----BEGIN RSA PRIVATE KEY-----\n'+
                       '-----END RSA PRIVATE KEY-----');
 console.log(logConsole('Done loading RSA Key!', 3));
 
+/* Is this really nessessary?
 console.log(logConsole('Starting terminal check, you should see the text "test" in various colors and formats.', 3));
 console.log(chalk.bold('test'));
 console.log(chalk.dim('test'));
@@ -49,6 +50,8 @@ console.log(chalk.bgCyan('test'));
 console.log(chalk.bgWhite('test'));
 
 console.log(logConsole('Terminal check complete!', 3));
+*/
+
 
 console.log(logConsole('Starting IdroServer System ' + versionFull + '...', 3));
 
@@ -101,7 +104,10 @@ function logConsole(logtext, level) {
 			loglevel = chalk.magenta('UNKOWN');
 			break;
 	}
+	//process.stdout.write(clc.move.up(1));
+	//process.stdout.write(clc.erase.line);
 	return '[' + getDateTime() + ']' + '[' + loglevel + ']' + ' ' + logtext;
+	//process.stdout.write(chalk.cyan("> "));
 }
 
 //Old code from System 1.0
@@ -173,7 +179,7 @@ console.log(logConsole('This is a test message! woot!', 0));
 server.listen(port, function ()
 { 
     console.log(logConsole('IdroServer System ' + versionFull + ' is listening on port ' + chalk.magenta(port), 3));
-	process.stdout.write("> ");
+	process.stdout.write(chalk.cyan("> "));
 });
 
 var shutdown = function shutdown(code){
@@ -205,6 +211,5 @@ rl.on('line', function (cmd) {
 			break;
 			
 	}
-	process.stdout.write("> ");
-	//case
+	process.stdout.write(chalk.cyan("> "));
 });
