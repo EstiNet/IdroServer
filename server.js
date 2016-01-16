@@ -1,17 +1,14 @@
-// IdroServer System 1.0
+// IdroServer System 2.0 - ALPHA
 // Copyright (c) 2016 EstiNet
-var http = require('http');
+var net = require('net');
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
 
-console.log('Starting IdroServer System 1.0');
+var port = 6000;
+var versionFull = "2.0 Alpha"
+var versionNumber = 2.1;
 
-var server = http.createServer(function(req, res){
-});
-
-var io = require('socket.io').listen(server);
-
-var serverdata = 'Doi';
+console.log('Starting IdroServer System ' + versionFull + '...');
 
 //Get the current date+time
 function getDateTime() {
@@ -57,6 +54,9 @@ function logConsole(logtext, level) {
 	}
 	return '[' + getDateTime() + ']' + '[' + loglevel + ']' + ' ' + logtext;
 }
+
+//Old code from System 1.0
+/*
 io.sockets.on('connection', function(socket) { 
 
     console.log(logConsole('Client connection initilizaed.', 3));
@@ -80,6 +80,27 @@ io.sockets.on('connection', function(socket) {
     });
 
 });
+*/
+
+var server = net.createServer(function (c)
+{ //'connection' listener
+    console.log(logConsole('Client connection initilizaed.', 3));
+    c.on('data', function (rawData)
+    {
+        console.log(logConsole(rawData, 0));   
+		var data = rawData.toString('utf-8');
+		console.log(logConsole(rawData, 3)); 
+		if(rawData == 'MG-CTF 1 state inprog'){
+			console.log(logConsole('CTF Minigame, Server 1, is now in progress!', 3));
+		}
+		eventEmitter.emit('MinigameUpdate');
+
+    });
+    c.on('end', function ()
+    {
+        console.log(logConsole('Client disconnected.', 3));
+    });
+});
 
 var minigameUpdate = function minigameUpdate(){
 	console.log(logConsole('minigameUpdate event recived!', 0));
@@ -87,4 +108,8 @@ var minigameUpdate = function minigameUpdate(){
 
 eventEmitter.on('MinigameUpdate', minigameUpdate);
 console.log(logConsole('This is a test message! woot!', 3));
-server.listen(8080);
+
+server.listen(port, function ()
+{ 
+    console.log('IdroServer System ' + versionFull + ' is listening on port ' + port);
+});
