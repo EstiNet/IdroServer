@@ -85,17 +85,21 @@ io.sockets.on('connection', function(socket) {
 var server = net.createServer(function (c)
 { //'connection' listener
     console.log(logConsole('Client connection initilizaed.', 3));
+	
     c.on('data', function (rawData)
     {
         console.log(logConsole(rawData, 0));   
 		var data = rawData.toString('utf-8');
-		console.log(logConsole(rawData, 3)); 
-		if(rawData == 'MG-CTF 1 state inprog'){
+		
+		console.log(logConsole(data, 3)); 
+		
+		if(data == 'MG-CTF 1 state inprog'){
 			console.log(logConsole('CTF Minigame, Server 1, is now in progress!', 3));
 		}
 		eventEmitter.emit('MinigameUpdate');
 
     });
+	
     c.on('end', function ()
     {
         console.log(logConsole('Client disconnected.', 3));
