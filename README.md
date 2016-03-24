@@ -3,7 +3,7 @@ EstiNet's Rewards System. Powered by Node.JS
 ## What is IdroServer? 
 IdroServer is a rewards systems for Minecraft Servers. It handles giving, redeeming, and creating rewards, coupons, and perks.
 
-IdroSevrer can link ingame rewards, with things such as liking a facebook page, redeeming something on a website, and so much more.
+IdroSevrer can link ingame rewards, with actions on external services such as liking a facebook page, redeeming a prize on a website, and so much more.
 
 ##Status
 **Current Version**: 0.1
